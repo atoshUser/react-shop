@@ -8,7 +8,16 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-const GoodItem = ({ full_background, description, image, name, price }) => {
+const GoodItem = ({
+  full_background,
+  description,
+  image,
+  name,
+  price,
+  orderedProduct,
+  id,
+  data
+}) => {
   return (
     <li className="item">
       <Card sx={{ height: "100%", width: "100%" }}>
@@ -29,7 +38,12 @@ const GoodItem = ({ full_background, description, image, name, price }) => {
         </CardContent>
         <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant={"h4"}>{price} $</Typography>
-          <Button variant="contained" size="medium" color="success">
+          <Button
+            variant="contained"
+            onClick={() => orderedProduct(data)}
+            size="medium"
+            color="success"
+          >
             Buy
           </Button>
         </CardActions>
