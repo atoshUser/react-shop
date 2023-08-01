@@ -3,4 +3,7 @@ export { default as Footer } from "./footer/Footer";
 export { default as Main } from "./main/Main";
 export { default as GoodItem } from "./goodsItem/GoodItem";
 export { default as GoodsList } from "./listGoods/GoodsList";
-export {default as Basket} from "./basket/Basket"
+export { default as Basket } from "./basket/Basket";
+export { default as OrderedList } from "./orderedList/OrderedList";
+export { default as OrderedItem } from "./orderedItem/OrderedItem";
+export { default as Loading } from "./loading/Loading";

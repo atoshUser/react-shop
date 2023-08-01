@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { GoodsList } from "..";
+import { GoodsList, OrderedList } from "..";
 import { Badge, IconButton } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { API_KEY, API_URL } from "../../config";
+import { Loading } from "../index";
 const Main = () => {
   const [isLoad, setIsLoad] = useState(true);
   const [data, setData] = useState([]);
   const [ordered, setOrdered] = useState([]);
-
+  const [isBasketShow, setBasketShow] = useState(false);
   // order product function
   console.log(ordered);
   const orderedProduct = (item) => {
@@ -29,6 +30,11 @@ const Main = () => {
       };
       setOrdered([...ordered, newOrder]);
     }
+  };
+
+  // func Basket show
+  const changeBasketShow = () => {
+    setBasketShow((prev) => !prev);
   };
 
   //
@@ -62,16 +68,21 @@ const Main = () => {
           top: "100px",
         }}
         aria-label="add-product"
+        onClick={changeBasketShow}
       >
         <Badge badgeContent={ordered.length} color="primary">
           <AddShoppingCartIcon />
         </Badge>
       </IconButton>
       {isLoad ? (
-        <h1>Nothing not found</h1>
+        <>
+          <br />
+          <Loading />
+        </>
       ) : (
         <GoodsList orderedProduct={orderedProduct} data={data} />
       )}
+      {isBasketShow && <OrderedList ordered={ordered} />}
     </div>
   );
 };
