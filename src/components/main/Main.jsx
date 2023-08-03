@@ -10,8 +10,9 @@ const Main = () => {
   const [data, setData] = useState([]);
   const [ordered, setOrdered] = useState([]);
   const [isBasketShow, setBasketShow] = useState(false);
+
+  
   // order product function
-  console.log(ordered);
   const orderedProduct = (item) => {
     const isCheckList = ordered.some((obj) => obj.id == item.id);
     if (isCheckList) {
@@ -37,7 +38,7 @@ const Main = () => {
     setBasketShow((prev) => !prev);
   };
 
-  //
+  // Get data from serice
   const getData = async () => {
     try {
       const { data } = await axios.get(API_URL, {
@@ -52,6 +53,14 @@ const Main = () => {
       console.log(error);
     }
   };
+
+  // function delete item from basket
+
+  const deleteItemFromBasket = (id) => {
+    const newOrderList = ordered.filter((obj) => obj.id !== id)
+    setOrdered(newOrderList)
+  }
+
 
   useEffect(() => {
     getData();
@@ -82,7 +91,7 @@ const Main = () => {
       ) : (
         <GoodsList orderedProduct={orderedProduct} data={data} />
       )}
-      {isBasketShow && <OrderedList ordered={ordered} />}
+      {isBasketShow && <OrderedList deleteItemFromBasket = {deleteItemFromBasket} changeBasket={changeBasketShow} ordered={ordered} />}
     </div>
   );
 };
