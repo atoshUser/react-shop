@@ -2,11 +2,13 @@ import { IconButton, Typography } from "@mui/material";
 import React from "react";
 import "./OrderedList.css";
 import { OrderedItem } from "../index";
+import { useContext } from "react";
+import { ShopContext } from "../context/context";
 import CloseIcon from "@mui/icons-material/Close";
-const OrderedList = ({ ordered, changeBasket = Function.prototype,deleteItemFromBasket = Function.prototype, decrementQuantity = Function.prototype, incrementQuantity = Function.prototype }) => {
-  // Total price of items cost
+const OrderedList = () => {
+  const { orderedProductList, changeBasketShow } = useContext(ShopContext);
 
-  const totalPrice = ordered.reduce((sum, obj) => {
+  const totalSum = orderedProductList.reduce((sum, obj) => {
     return sum + obj.price * obj.quantity;
   }, 0);
 
@@ -21,15 +23,15 @@ const OrderedList = ({ ordered, changeBasket = Function.prototype,deleteItemFrom
           <Typography variant={"h4"}>Baskets</Typography>
           <IconButton
             sx={{ color: "#fff" }}
-            onClick={changeBasket}
+            onClick={changeBasketShow}
             aria-label="close-icon"
           >
             <CloseIcon />
           </IconButton>
         </li>
-        {ordered.length ? (
-          ordered.map((item) => {
-            return <OrderedItem {...item} decrementQuantity = {decrementQuantity} incrementQuantity = {incrementQuantity} deleteItemFromBasket = {deleteItemFromBasket} />;
+        {orderedProductList.length ? (
+          orderedProductList.map((item) => {
+            return <OrderedItem key={item.id} data={item} {...item} />;
           })
         ) : (
           <li className="text-dark" key={"basket-total"}>
@@ -37,7 +39,7 @@ const OrderedList = ({ ordered, changeBasket = Function.prototype,deleteItemFrom
           </li>
         )}
         <li className="p-1" style={{ background: "teal" }}>
-          <Typography variant={"h4"}>Total price: {totalPrice} $</Typography>
+          <Typography variant={"h4"}>Total price: {totalSum} $</Typography>
         </li>
       </ul>
     </div>

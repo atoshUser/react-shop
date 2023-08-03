@@ -1,43 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { GoodsList, OrderedList } from "..";
+import { GoodsList, OrderedList } from "../";
 import { Badge, IconButton } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { API_KEY, API_URL } from "../../config";
 import { Loading } from "../index";
+import { toast } from "react-toastify";
+import { ShopContext } from "../context/context";
 const Main = () => {
-  const [isLoad, setIsLoad] = useState(true);
-  const [data, setData] = useState([]);
-  const [ordered, setOrdered] = useState([]);
-  const [isBasketShow, setBasketShow] = useState(false);
+  const {
+    setData,
+    isBasketShow,
+    changeBasketShow,
+    orderedProductList,
+    isLoading,
+    changeLoad,
+    minusOfProduct,
+  } = useContext(ShopContext);
 
-  // order product function
-  const orderedProduct = (item) => {
-    const isCheckList = ordered.some((obj) => obj.id == item.id);
-    if (isCheckList) {
-      const newOrdered = ordered.map((product) => {
-        if (product.id == item.id) {
-          return { ...product, quantity: product.quantity + 1 };
-        } else {
-          return { ...product };
-        }
-      });
-      setOrdered(newOrdered);
-    } else {
-      const newOrder = {
-        ...item,
-        quantity: 1,
-      };
-      setOrdered([...ordered, newOrder]);
-    }
-  };
-
-  // func Basket show
-  const changeBasketShow = () => {
-    setBasketShow((prev) => !prev);
-  };
-
-  // Get data from serice
+  // Get data from service
   const getData = async () => {
     try {
       const { data } = await axios.get(API_URL, {
@@ -47,47 +28,10 @@ const Main = () => {
       });
 
       setData(data.featured);
-      setIsLoad(false);
+      changeLoad();
     } catch (error) {
       console.log(error);
     }
-  };
-
-  // function delete item from basket
-  const deleteItemFromBasket = (id) => {
-    const newOrderList = ordered.filter((obj) => obj.id !== id);
-    setOrdered(newOrderList);
-  };
-
-  // fnc update orderList plus quantity
-
-  const incrementQuantity = (itemID) => {
-    const newOrderList = ordered.map((obj) => {
-      if (obj.id == itemID) {
-        return {
-          ...obj,
-          quantity: obj.quantity + 1,
-        };
-      } else {
-        return { ...obj };
-      }
-    });
-    setOrdered(newOrderList);
-  };
-
-  // fnc update orderList minus quantity
-  const decrementQuantity = (id) => {
-    const newOrderList = ordered.map((obj) => {
-      if (obj.id == id) {
-        return {
-          ...obj,
-          quantity: obj.quantity == 1 ? obj.quantity : obj.quantity - 1,
-        };
-      } else {
-        return { ...obj };
-      }
-    });
-    setOrdered(newOrderList);
   };
 
   useEffect(() => {
@@ -107,27 +51,19 @@ const Main = () => {
         aria-label="add-product"
         onClick={changeBasketShow}
       >
-        <Badge badgeContent={ordered.length} color="primary">
+        <Badge color="primary" badgeContent={orderedProductList.length}>
           <AddShoppingCartIcon />
         </Badge>
       </IconButton>
-      {isLoad ? (
+      {isLoading ? (
         <>
           <br />
           <Loading />
         </>
       ) : (
-        <GoodsList orderedProduct={orderedProduct} data={data} />
+        <GoodsList />
       )}
-      {isBasketShow && (
-        <OrderedList
-          decrementQuantity={decrementQuantity}
-          incrementQuantity={incrementQuantity}
-          deleteItemFromBasket={deleteItemFromBasket}
-          changeBasket={changeBasketShow}
-          ordered={ordered}
-        />
-      )}
+      {isBasketShow && <OrderedList />}
     </div>
   );
 };

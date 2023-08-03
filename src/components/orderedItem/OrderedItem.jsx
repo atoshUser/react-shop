@@ -3,16 +3,11 @@ import { IconButton, Stack } from "@mui/material";
 import PlusOneIcon from "@mui/icons-material/PlusOne";
 import RemoveIcon from "@mui/icons-material/Remove";
 import React from "react";
-
-const OrderedItem = ({
-  name,
-  quantity,
-  price,
-  id,
-  deleteItemFromBasket = Function.prototype,
-  incrementQuantity = Function.prototype,
-  decrementQuantity = Function.prototype,
-}) => {
+import { useContext } from "react";
+import { ShopContext } from "../context/context";
+const OrderedItem = ({ data, quantity, price, name, id }) => {
+  const { setOrderedProduct, minusOfProduct, deleteProduct } =
+    useContext(ShopContext);
   return (
     <li
       className="d-flex p-2 align-items-center bg-light text-dark"
@@ -37,14 +32,14 @@ const OrderedItem = ({
           <IconButton
             aria-label="add-product"
             color="success"
-            onClick={() => incrementQuantity(id)}
+            onClick={() => setOrderedProduct(data)}
           >
             <PlusOneIcon />
           </IconButton>
           <IconButton
             aria-label="minus-product"
+            onClick={() => minusOfProduct(id)}
             sx={{ color: "crimson" }}
-            onClick={() => decrementQuantity(id)}
           >
             <RemoveIcon />
           </IconButton>
@@ -53,7 +48,7 @@ const OrderedItem = ({
         <IconButton
           aria-label="delete"
           sx={{ position: "absolute", right: "10px", color: "crimson" }}
-          onClick={() => deleteItemFromBasket(id)}
+          onClick={() => deleteProduct(id)}
         >
           <DeleteIcon />
         </IconButton>

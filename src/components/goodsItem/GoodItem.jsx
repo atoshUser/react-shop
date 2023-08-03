@@ -1,5 +1,7 @@
 import React from "react";
 import "./GoodItem.css";
+import { useContext } from "react";
+import { ShopContext } from "../context/context";
 import {
   Button,
   Card,
@@ -8,16 +10,9 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
-const GoodItem = ({
-  full_background,
-  description,
-  image,
-  name,
-  price,
-  orderedProduct,
-  id,
-  data
-}) => {
+const GoodItem = ({ full_background, description, name, price, data }) => {
+  const { setOrderedProduct } = useContext(ShopContext);
+
   return (
     <li className="item">
       <Card sx={{ height: "100%", width: "100%" }}>
@@ -39,8 +34,8 @@ const GoodItem = ({
         <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant={"h4"}>{price} $</Typography>
           <Button
+            onClick={() => setOrderedProduct(data)}
             variant="contained"
-            onClick={() => orderedProduct(data)}
             size="medium"
             color="success"
           >
