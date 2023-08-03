@@ -11,7 +11,6 @@ const Main = () => {
   const [ordered, setOrdered] = useState([]);
   const [isBasketShow, setBasketShow] = useState(false);
 
-  
   // order product function
   const orderedProduct = (item) => {
     const isCheckList = ordered.some((obj) => obj.id == item.id);
@@ -55,12 +54,41 @@ const Main = () => {
   };
 
   // function delete item from basket
-
   const deleteItemFromBasket = (id) => {
-    const newOrderList = ordered.filter((obj) => obj.id !== id)
-    setOrdered(newOrderList)
-  }
+    const newOrderList = ordered.filter((obj) => obj.id !== id);
+    setOrdered(newOrderList);
+  };
 
+  // fnc update orderList plus quantity
+
+  const incrementQuantity = (itemID) => {
+    const newOrderList = ordered.map((obj) => {
+      if (obj.id == itemID) {
+        return {
+          ...obj,
+          quantity: obj.quantity + 1,
+        };
+      } else {
+        return { ...obj };
+      }
+    });
+    setOrdered(newOrderList);
+  };
+
+  // fnc update orderList minus quantity
+  const decrementQuantity = (id) => {
+    const newOrderList = ordered.map((obj) => {
+      if (obj.id == id) {
+        return {
+          ...obj,
+          quantity: obj.quantity == 1 ? obj.quantity : obj.quantity - 1,
+        };
+      } else {
+        return { ...obj };
+      }
+    });
+    setOrdered(newOrderList);
+  };
 
   useEffect(() => {
     getData();
@@ -91,7 +119,15 @@ const Main = () => {
       ) : (
         <GoodsList orderedProduct={orderedProduct} data={data} />
       )}
-      {isBasketShow && <OrderedList deleteItemFromBasket = {deleteItemFromBasket} changeBasket={changeBasketShow} ordered={ordered} />}
+      {isBasketShow && (
+        <OrderedList
+          decrementQuantity={decrementQuantity}
+          incrementQuantity={incrementQuantity}
+          deleteItemFromBasket={deleteItemFromBasket}
+          changeBasket={changeBasketShow}
+          ordered={ordered}
+        />
+      )}
     </div>
   );
 };

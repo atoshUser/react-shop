@@ -3,7 +3,7 @@ import React from "react";
 import "./OrderedList.css";
 import { OrderedItem } from "../index";
 import CloseIcon from "@mui/icons-material/Close";
-const OrderedList = ({ ordered, changeBasket = Function.prototype,deleteItemFromBasket = Function.prototype }) => {
+const OrderedList = ({ ordered, changeBasket = Function.prototype,deleteItemFromBasket = Function.prototype, decrementQuantity = Function.prototype, incrementQuantity = Function.prototype }) => {
   // Total price of items cost
 
   const totalPrice = ordered.reduce((sum, obj) => {
@@ -29,7 +29,7 @@ const OrderedList = ({ ordered, changeBasket = Function.prototype,deleteItemFrom
         </li>
         {ordered.length ? (
           ordered.map((item) => {
-            return <OrderedItem {...item} deleteItemFromBasket = {deleteItemFromBasket} />;
+            return <OrderedItem {...item} decrementQuantity = {decrementQuantity} incrementQuantity = {incrementQuantity} deleteItemFromBasket = {deleteItemFromBasket} />;
           })
         ) : (
           <li className="text-dark" key={"basket-total"}>
